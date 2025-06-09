@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "ML_Projects.egg-info"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
