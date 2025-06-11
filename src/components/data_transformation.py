@@ -25,13 +25,13 @@ class DataTransformation:
 
     def get_data_transformer_object(self):
         try:
-            numerical_features = ['writing_score', 'reading_score']
+            numerical_columns = ['writing score', 'reading score']
             categorical_columns = [
                 "gender",
-                "race_ethnicity",
-                "parental_level_of_education",
+                "race/ethnicity",
+                "parental level of education",
                 "lunch",
-                "test_preparation_course",
+                "test preparation course"
             ]
 
             num_pipeline = Pipeline(
@@ -45,18 +45,18 @@ class DataTransformation:
             cat_pipeline = Pipeline(
                 steps=[
                     ("imputer", SimpleImputer(strategy="most_frequent")),
-                    ("onehotencoder", OneHotEncoder()),
-                    ("scaler", StandardScaler()),
+                    ("onehotencoder", OneHotEncoder(sparse_output=True)),
+                    ("scaler", StandardScaler(with_mean=False)), # Use with_mean=False for sparse output,
                 ]
             )
 
             logging.info(f"Categorical columns: {categorical_columns}")
-            logging.info(f"Numerical columns: {numerical_features}")
+            logging.info(f"Numerical columns: {numerical_columns}")
             
 
             preprocessor = ColumnTransformer(
                 [
-                 ("num_pipeline",num_pipeline,numerical_columns),
+                 ("num_pipeline",num_pipeline, numerical_columns),
                  ("cat_pipeline", cat_pipeline, categorical_columns)
                  ]
 
@@ -81,8 +81,8 @@ class DataTransformation:
 
             preprocessing_obj = self.get_data_transformer_object()
 
-            target_column_name = "math_score"
-            numerical_columns = ['writing_score', 'reading_score']
+            target_column_name = "math score"
+            numerical_columns = ['writing score', 'reading score']
             
 
             input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
@@ -99,7 +99,7 @@ class DataTransformation:
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
         
 
-            logging.info("Saved preprocessing object.")
+            logging.info(f"Saved preprocessing object.")
 
             save_object(
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
@@ -113,7 +113,7 @@ class DataTransformation:
                 self.data_transformation_config.preprocessor_obj_file_path,
             )
         except Exception as e:
-            raise CustomException(e, sys)
+            raise CustomException(e,sys)
 
     
               
